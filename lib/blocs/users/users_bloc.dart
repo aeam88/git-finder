@@ -29,6 +29,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   ) async* {
     if (event is UsersSearchUsers) {
       yield* _mapUsersSearchUsersToState(event);
+    } else if (event is UserPaginate) {
+      yield* _mapUsersPaginateToState();
     }
   }
 
@@ -47,5 +49,23 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
           ),
           status: UserStatus.error);
     }
+  }
+
+  Stream<UsersState> _mapUsersPaginateToState() async* {
+    yield state.copyWith(status: UserStatus.paginating);
+
+    final users = List<User>.from(state.users);
+    List<User> netxUsers = [];
+
+    if (users.length >= UsersRepository.numPerPage) {
+      netxUsers = await _usersRepository.searchUsers(
+          query: state.query,
+          page: state.users.length ~/ UsersRepository.numPerPage + 1);
+    }
+
+    yield state.copyWith(
+      users: users..addAll(netxUsers),
+      status: netxUsers.isNotEmpty ? UserStatus.loaded : UserStatus.noMoreUsers,
+    );
   }
 }

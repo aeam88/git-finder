@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:git_finder/models/failure_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:git_finder/models/user_model.dart';
@@ -33,22 +34,9 @@ class UsersRepository extends BaseUserRepository {
       final List results = data['items'];
       final List<User> users = results.map((e) => User.fromMap(e)).toList();
 
-      // for (final user in users) {
-      //   final urlUser = '$_gitBaseUrl/users/${user.username}';
-      //   final respuesta = await _httpClient.get(urlUser);
-
-      //   if (respuesta.statusCode == 200) {
-      //     final Map<String, dynamic> dataUser = jsonDecode(respuesta.body);
-      //     user.followers = dataUser['followers'];
-      //     user.following = dataUser['following'];
-      //     user.name = dataUser['name'];
-      //     // print(dataUser);
-      //   }
-      // }
-
       return users;
     }
-    return [];
+    throw Failure();
   }
 
   @override

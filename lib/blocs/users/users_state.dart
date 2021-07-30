@@ -1,6 +1,6 @@
 part of 'users_bloc.dart';
 
-enum UserStatus { initial, loading, loaded, error }
+enum UserStatus { initial, loading, loaded, paginating, noMoreUsers, error }
 
 class UsersState extends Equatable {
   final String query;

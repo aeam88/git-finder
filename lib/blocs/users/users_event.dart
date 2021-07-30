@@ -18,3 +18,5 @@ class UsersSearchUsers extends UsersEvent {
   @override
   List<Object> get props => [query];
 }
+
+class UserPaginate extends UsersEvent {}
